@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>+ - Calculator</title>
+    <link rel="stylesheet" href="calculator.css" />
+    <script type="text/javascript" src="calculator.js"></script>
+</head>
+
+<body>
+    <div id="container">
+        <div id="o">
+            <div class="pad">
+                <h5>CALCULATED</h5>
+                <p id="result" class="input">0</p>
+            </div>
+        </div>
+        <div id="i">
+            <div id="variable" class="pad">
+                <h5>INPUT</h5>
+                <p id="var" class="input">0</p>
+            </div>
+            <div id="numbers">
+                <div class="line"><button id="1" class="numberkey">1</button><button id="2" class="numberkey">2</button><button id="3" class="numberkey">3</button></div>
+                <div class="line"><button id="4" class="numberkey">4</button><button id="5" class="numberkey">5</button><button id="6" class="numberkey">6</button></div>
+                <div class="line"><button id="7" class="numberkey">7</button><button id="8" class="numberkey">8</button><button id="9" class="numberkey">9</button></div>
+                <div class="line">
+                    <!--<button class="empty">&nbsp;</button>--><button id="0" class="numberkey">0</button><button id="dot" class="numberkey">.</button></div>
+            </div>
+            <div id="buttons">
+                <div class="line"><button id="reset" class="reset">AC</button></div>
+                <div class="line"><button id="plus" class="fn plus">+</button></div>
+                <div class="line"><button id="minus" class="fn minus">-</button></div>
+                <div class="line"><button id="equal" class="equal">=</button></div>
+            </div>
+            <div style="clear: both"></div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript" charset="UTF-8">
+        (function() {
+            if (!console) {
+                window.console = {
+                    log: function() {}
+                }
+            }
+            const KEYCODE_SHIFT = 16;
+            let KEYCODE_MINUS = null;
+            let KEYCODE_PLUS_N_EQUAL = null;
+
+            const BROWSER = navigator.appName.toLowerCase();
+
+            if (BROWSER.indexOf("ms") > 0) {
+                alert('I hate fxxxxxx IE.');
+                window.location.href = 'https:/www.google.com/chrome/browser/index.html';
+                return false;
+            }
+
+            if (BROWSER.indexOf('firefox') > 0) {
+                KEYCODE_MINUS = 173;
+                KEYCODE_PLUS_N_EQUAL = 61;
+            } else {
+                KEYCODE_MINUS = 189;
+                KEYCODE_PLUS_N_EQUAL = 187;
+            }
+            let onShift = false;
+            //apply global keyup event to keypad & buttons
+            document.onkeyup = function(evt) {
+                let wh = evt.which;
+                let pressId = null;
+                if (wh === KEYCODE_SHIFT && onShift) {
+                    onShift = false;
+                } else
+                if (onShift && wh === KEYCODE_PLUS_N_EQUAL) {
+                    pressId = "plus";
+                } else
+                if (wh === KEYCODE_MINUS) {
+                    pressId = "minus";
+                } else
+                if (wh === 13 || wh === KEYCODE_PLUS_N_EQUAL) {
+                    pressId = "equal";
+                } else
+                if (48 <= wh && wh <= 57) {
+                    pressId = String.fromCharCode(wh);
+                }
+                if (pressId !== null) {
+                    document.getElementById(pressId).click();
+                }
+
+            };
+            document.onkeydown = function(evt) {
+                if (evt.which === KEYCODE_SHIFT) {
+                    onShift = true;
+                }
+            }
+            console.log("Key event activated.");
+
+
+            let calculator = new Calculator("var", "result");
+            calculator.registNumpads(document.getElementsByClassName("numberkey"));
+            calculator.registButtons(document.getElementsByClassName("fn"));
+            calculator.registEqual(document.getElementById("equal"));
+            calculator.registReset(document.getElementById("reset"));
+
+        })();
+    </script>
+</body>
+
+</html>
